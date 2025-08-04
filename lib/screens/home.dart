@@ -2,12 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:online_shop_app/appstyles/app_colors.dart';
-
 import 'package:online_shop_app/provider/product_provider.dart';
 import 'package:online_shop_app/screens/product_details.dart';
-
-
-
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -18,11 +14,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // int _currentIndex = 0;
-  int _selectedButtonIndex = 0; // Track selected button (0 = All, 1 = Popular, etc.)
+  int _currentIndex = 0;
 
   void fetchData() async {
-    Provider.of<ProductProvider>(context, listen: false).getProduct();
+    await Provider.of<ProductProvider>(context, listen: false).getProduct();
+    await Provider.of<ProductProvider>(context, listen: false).getCategories();
   }
 
   @override
@@ -34,7 +30,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final products = context.watch<ProductProvider>().productList;
-    print('List of product: $products');
+    final categories = context.watch<ProductProvider>().categories;
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 242, 226, 226),
@@ -54,8 +50,8 @@ class _HomePageState extends State<HomePage> {
                   icon: Image.asset('images/menu.png'),
                 ),
               ),
-              Column(
-                children: const [
+              const Column(
+                children: [
                   Text(
                     'Hello Zakie',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
@@ -102,16 +98,16 @@ class _HomePageState extends State<HomePage> {
                                 borderRadius: BorderRadius.circular(12.0),
                                 borderSide: BorderSide(color: AppColors.redColor, width: 2.0),
                               ),
-                              contentPadding: EdgeInsets.symmetric(vertical: 12.0),
+                              contentPadding: const EdgeInsets.symmetric(vertical: 12.0),
                             ),
                             onChanged: (value) {
                               // Add search functionality here if needed
                             },
                           ),
                         ),
-                        SizedBox(width: 30.0),
+                        const SizedBox(width: 30.0),
                         Container(
-                          padding: EdgeInsets.all(10),
+                          padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             color: AppColors.redColor,
@@ -127,139 +123,149 @@ class _HomePageState extends State<HomePage> {
                     decoration: BoxDecoration(
                       color: AppColors.redColor,
                       borderRadius: BorderRadius.circular(40),
-                      
-                      
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 150, top: 20),
+                    child: const Padding(
+                      padding: EdgeInsets.only(left: 150, top: 20),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text('Big Sale', style: TextStyle(color: Colors.white, fontSize: 23, fontWeight: FontWeight.w500),),
-                          Text('    Get the trendy', style: TextStyle(color: Colors.white, fontSize: 15),),
-                          Text('               Fashion at a discount', style: TextStyle(color: Colors.white, fontSize: 15),),
-                          Text(' of up to 50%', style: TextStyle(color: Colors.white, fontSize: 15),)
+                          Text(
+                            'Big Sale',
+                            style: TextStyle(color: Colors.white, fontSize: 23, fontWeight: FontWeight.w500),
+                          ),
+                          Text(
+                            '    Get the trendy',
+                            style: TextStyle(color: Colors.white, fontSize: 15),
+                          ),
+                          Text(
+                            '               Fashion at a discount',
+                            style: TextStyle(color: Colors.white, fontSize: 15),
+                          ),
+                          Text(
+                            ' of up to 50%',
+                            style: TextStyle(color: Colors.white, fontSize: 15),
+                          ),
                         ],
                       ),
                     ),
                   ),
-                  SizedBox(height: 30,),
+                  const SizedBox(height: 30),
                   SizedBox(
-                    height: 40, // Set a fixed height for the horizontal ListView
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      children: [
-                        _buildFilterButton('All', 0),
-                        _buildFilterButton('Popular', 1),
-                        _buildFilterButton('Recent', 2),
-                        _buildFilterButton('Recommended', 3),
-                        // Add more buttons if needed
-                      ],
-                    ),
+                    height: 40,
+                    child: categories == null
+                        ? const Center(child: CircularProgressIndicator())
+                        : ListView.builder(
+                            itemCount: categories.length,
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (context, index) {
+                              final isSelected = _currentIndex == index;
+                              return GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _currentIndex = index;
+                                  });
+                                  // Add category filtering logic here if needed
+                                },
+                                child: Container(
+                                  margin: const EdgeInsets.symmetric(horizontal: 8),
+                                  height: 56,
+                                  width: 150,
+                                  decoration: BoxDecoration(
+                                    color: isSelected ? AppColors.redColor : Colors.white,
+                                    borderRadius: BorderRadius.circular(50),
+                                    border: Border.all(
+                                      color: isSelected ? AppColors.redColor : Colors.black,
+                                    ),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      categories[index].name.toString(),
+                                      style: TextStyle(
+                                        color: isSelected ? Colors.white : Colors.black,
+                                        fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
                   ),
-                 SizedBox(
-                  height: 40,
-                 ),
-
-          
-          
+                  const SizedBox(height: 40),
                 ],
               ),
               Positioned(
                 top: 95,
-                child: Image.asset('images/female1.png',height: 165,))
+                child: Image.asset('images/female1.png', height: 165),
+              ),
             ],
           ),
-                              Expanded(
-                   
-                      child: products ==null? Center(
-                            child: CircularProgressIndicator(),)
-                            :GridView.builder(
-                              
-                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                mainAxisSpacing: 20,
-                                crossAxisSpacing: 20,
-                              childAspectRatio: 0.6,
-                                crossAxisCount: 2,
+          Expanded(
+            child: products == null
+                ? const Center(child: CircularProgressIndicator())
+                : GridView.builder(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      mainAxisSpacing: 20,
+                      crossAxisSpacing: 20,
+                      childAspectRatio: 0.6,
+                      crossAxisCount: 2,
+                    ),
+                    itemCount: products.length,
+                    itemBuilder: (context, index) {
+                      final product = products[index];
+                      return Column(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ProductDetails(products: product),
                                 ),
-                              itemCount: products.length,
-                              itemBuilder: (context, index){
-                                final product = products[index];
-                                
-                              
-                                return Column(
-                                  // crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(context, MaterialPageRoute(builder: (context)=>ProductDetails(products: product)));
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                                      child: product.images.isEmpty? Text('No image'): ClipRRect(
-                                        borderRadius: BorderRadius.circular(20),
-                                        child: Hero(
-                                          tag: product.id!,
-                                          child: Image.network(product.images[0], fit: BoxFit.fill, height: 250,))),
+                              );
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 10),
+                              child: product.images.isEmpty
+                                  ? const Text('No image')
+                                  : ClipRRect(
+                                      borderRadius: BorderRadius.circular(20),
+                                      child: Hero(
+                                        tag: product.id!,
+                                        child: Image.network(
+                                          product.images[0],
+                                          fit: BoxFit.fill,
+                                          height: 250,
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                 Padding(
-                                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                     Text(product.title!),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text('\$${product.price}',style: TextStyle(fontWeight: FontWeight.w900),),
-                                        Icon(Icons.favorite, color: Colors.red)
-                                      ],
-                                    )
-                                   ],),
-                                 )
-                                 
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(product.title ?? ''),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      '\$${product.price?.toStringAsFixed(2)}',
+                                      style: const TextStyle(fontWeight: FontWeight.w900),
+                                    ),
+                                    const Icon(Icons.favorite, color: Colors.red),
                                   ],
-                                );
-                                
-                             
-                              }),
-                    ), 
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+          ),
         ],
-      ),
-      
-      );
-    
-  }
-
-  Widget _buildFilterButton(String label, int index) {
-    bool isSelected = _selectedButtonIndex == index;
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4.0),
-      child: TextButton(
-        onPressed: () {
-          setState(() {
-            _selectedButtonIndex = index;
-          });
-          // Add filtering logic here if needed
-        },
-        style: TextButton.styleFrom(
-          backgroundColor: isSelected ? AppColors.redColor : Colors.white,
-          foregroundColor: isSelected ? Colors.white : Colors.black,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30),
-            side: BorderSide(color: isSelected ? AppColors.redColor : Colors.grey[300]!),
-          ),
-          padding: EdgeInsets.symmetric( horizontal: 16.0),
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-            color: isSelected ? Colors.white : Colors.black,
-          ),
-        ),
       ),
     );
   }

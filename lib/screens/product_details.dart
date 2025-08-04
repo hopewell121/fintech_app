@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:online_shop_app/appstyles/app_colors.dart';
 import 'package:online_shop_app/model/product_model.dart';
 import 'package:online_shop_app/provider/product_provider.dart';
+import 'package:online_shop_app/screens/cart_screen.dart';
 import 'package:provider/provider.dart';
 
 
@@ -63,7 +64,7 @@ class ProductDetails extends StatelessWidget {
                                   backgroundColor: AppColors.redColor
                                 ),
                                 onPressed: (){
-                                  // Navigator.push(context, MaterialPageRoute(builder: (context)=>CartList()))
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>CartPage()));
                                 }, child: Text('Buy Now', style: TextStyle(color: Colors.white, fontSize: 25),)),
                             ),
                             Container(

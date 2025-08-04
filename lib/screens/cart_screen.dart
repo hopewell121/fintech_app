@@ -11,21 +11,21 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
-  int myCount = 1; // Shared quantity for simplicity
+  List<int> itemQuantities = []; // Store quantities for each item
   double totalprice = 0;
   List<bool> checkboxStates = []; // Store checkbox states for each item
 
-  void incrementCounter() {
+  void incrementCounter(int index) {
     setState(() {
-      myCount++;
+      itemQuantities[index]++;
       updateTotalPrice();
     });
   }
 
-  void decrementCount() {
+  void decrementCount(int index) {
     setState(() {
-      if (myCount > 1) {
-        myCount--;
+      if (itemQuantities[index] > 1) {
+        itemQuantities[index]--;
         updateTotalPrice();
       }
     });
@@ -36,7 +36,7 @@ class _CartPageState extends State<CartPage> {
     totalprice = 0;
     for (int i = 0; i < cartlist.productCartList.length; i++) {
       if (checkboxStates[i]) {
-        totalprice += myCount * (cartlist.productCartList[i].price ?? 0);
+        totalprice += itemQuantities[i] * (cartlist.productCartList[i].price ?? 0);
       }
     }
   }
@@ -58,6 +58,7 @@ class _CartPageState extends State<CartPage> {
       final cartlist = Provider.of<ProductProvider>(context, listen: false);
       setState(() {
         checkboxStates = List<bool>.filled(cartlist.productCartList.length, true);
+        itemQuantities = List<int>.filled(cartlist.productCartList.length, 1);
         updateTotalPrice();
       });
     });
@@ -68,7 +69,7 @@ class _CartPageState extends State<CartPage> {
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       appBar: AppBar(
-        automaticallyImplyLeading: true,
+        automaticallyImplyLeading: false,
         backgroundColor: AppColors.backgroundColor,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -104,6 +105,7 @@ class _CartPageState extends State<CartPage> {
               builder: (context, cartlist, child) {
                 if (checkboxStates.length != cartlist.productCartList.length) {
                   checkboxStates = List<bool>.filled(cartlist.productCartList.length, true);
+                  itemQuantities = List<int>.filled(cartlist.productCartList.length, 1);
                   updateTotalPrice();
                 }
                 return ListView.builder(
@@ -198,20 +200,20 @@ class _CartPageState extends State<CartPage> {
                               right: 60,
                               bottom: 10,
                               child: IconButton(
-                                onPressed: decrementCount,
+                                onPressed: () => decrementCount(index),
                                 icon: const Icon(Icons.minimize, size: 18),
                               ),
                             ),
                             Positioned(
                               right: 50,
                               bottom: 20,
-                              child: Text('$myCount'),
+                              child: Text('${itemQuantities[index]}'),
                             ),
                             Positioned(
                               right: 0,
                               bottom: 5,
                               child: IconButton(
-                                onPressed: incrementCounter,
+                                onPressed: () => incrementCounter(index),
                                 icon: const Icon(Icons.add, size: 18),
                               ),
                             ),
@@ -221,10 +223,10 @@ class _CartPageState extends State<CartPage> {
                               child: IconButton(
                                 onPressed: () {
                                   context.read<ProductProvider>().clearCart(cartItem);
-                                setState(() {
-                                  updateTotalPrice();
-                                });
-                                  
+                                  setState(() {
+                                
+                                    updateTotalPrice();
+                                  });
                                 },
                                 icon: Icon(Icons.delete, size: 25, color: AppColors.redColor),
                               ),
@@ -238,7 +240,7 @@ class _CartPageState extends State<CartPage> {
               },
             ),
           ),
-          if (isAnyCheckboxChecked()) // Conditionally show total section
+          if (isAnyCheckboxChecked())
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
               child: Column(

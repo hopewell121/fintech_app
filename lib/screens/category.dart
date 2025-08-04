@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:online_shop_app/appstyles/app_colors.dart';
 import 'package:online_shop_app/provider/product_provider.dart';
 import 'package:online_shop_app/screens/categories_details.dart';
+
 import 'package:provider/provider.dart';
 
 class Categories extends StatefulWidget {
@@ -13,19 +14,19 @@ class Categories extends StatefulWidget {
 
 class _CategoriesState extends State<Categories> {
 
-  void fetchCategory() async {
-    Provider.of<ProductProvider>(context, listen: false).getCategories();
-  }
+  // void fetchCategory() async {
+  //   Provider.of<ProductProvider>(context, listen: false).getCategories();
+  // }
 
-  @override
-  void initState() {
-    super.initState();
-    fetchCategory();
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   fetchCategory();
+  // }
   @override
   Widget build(BuildContext context) {
-    final Categories1 = context.watch<ProductProvider>().categories;
-    print('List of categoris: $Categories1');
+    final categories = context.watch<ProductProvider>().categories;
+    print('List of categoris: $categories');
     return Scaffold(
       appBar:  AppBar(
         automaticallyImplyLeading: true,
@@ -38,7 +39,7 @@ class _CategoriesState extends State<Categories> {
               backgroundColor: Colors.white,
               child: IconButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                  // Navigator.pop(context);
                 },
                 icon: Image.asset('images/menu.png'),
               ),
@@ -58,35 +59,37 @@ class _CategoriesState extends State<Categories> {
         ),
       ),
       backgroundColor: AppColors.backgroundColor,
-      body: Column(
-        children: [
-          Text('Choose your brand', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
-          Expanded(
-                                
-            child: Categories1==null? Center(
-              child: CircularProgressIndicator(),):
-              ListView.builder(
-                itemCount: Categories1.length,
-                itemBuilder: (context, index){
-            final  Categories2 = Categories1[index];
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>CategoriesDetails()));
-                },
-                child: ListTile(
-                  subtitle: Text('${Categories2.slug}'),
-                  trailing: Text('${Categories2.id}'),
-                  leading: Image.network(Categories2.image.toString()),
-                  title: Text('${Categories2.name}'),
-                ),
-              ),
-            );
-                })
-              )
-        ],
-      )
+
+      body: Consumer<ProductProvider>(
+        builder: (context, categories, child){
+          return GestureDetector(
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>CategoriesDetails()));
+            },
+            child: GridView.builder(
+              itemCount: categories.categories!.length,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,
+              
+              childAspectRatio: 0.75),
+               itemBuilder: (context, index){
+                final newCateries = categories.categories![index];
+                return categories.categories == null?
+                Center(child: CircularProgressIndicator(),):
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                    ClipRRect(
+                      borderRadius: BorderRadiusGeometry.circular(30),
+                      child: Image.network(newCateries.image.toString())),
+                    Text(newCateries.name.toString())
+                    ],
+                  ),
+                );
+               }),
+          );
+        })
+
     );
   }
 }
