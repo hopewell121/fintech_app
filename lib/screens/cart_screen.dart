@@ -79,7 +79,7 @@ class _CartPageState extends State<CartPage> {
               backgroundColor: Colors.white,
               child: IconButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                  // Navigator.pop(context);
                 },
                 icon: Image.asset('images/menu.png'),
               ),

@@ -169,7 +169,7 @@ class _HomePageState extends State<HomePage> {
                                 child: Container(
                                   margin: const EdgeInsets.symmetric(horizontal: 8),
                                   height: 56,
-                                  width: 150,
+                                  width: 180,
                                   decoration: BoxDecoration(
                                     color: isSelected ? AppColors.redColor : Colors.white,
                                     borderRadius: BorderRadius.circular(50),
