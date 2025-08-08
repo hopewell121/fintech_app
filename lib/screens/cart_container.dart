@@ -154,9 +154,9 @@ class _CartContainerState extends State<CartContainer> {
                           ),
                         ),
                       ),
-                      Positioned(
-                        child: Image.asset('images/female.png'),
-                      ),
+                      // Positioned(
+                      //   child: Image.asset('images/female.png'),
+                      // ),
                       Positioned(
                         right: 50,
                         bottom: 32,

@@ -43,7 +43,7 @@ class _CartPageState extends State<CartPage> {
 
   void addToCartItems() {
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('You have successfully added this item')),
+      const SnackBar(content: Text('Directing you to pay')),
     );
   }
 
@@ -79,7 +79,7 @@ class _CartPageState extends State<CartPage> {
               backgroundColor: Colors.white,
               child: IconButton(
                 onPressed: () {
-                  // Navigator.pop(context);
+                  Navigator.pop(context);
                 },
                 icon: Image.asset('images/menu.png'),
               ),

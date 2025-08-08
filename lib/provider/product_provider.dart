@@ -8,6 +8,57 @@ import 'package:online_shop_app/services/api_services.dart';
 
 class ProductProvider extends ChangeNotifier {
 
+
+//...............GETTING THE SEARCH FILTER FROM THE API...............
+  // // create a getter
+
+
+  Future<void> getSearchFilter({required String title}) async{ 
+ final url = 'https://api.escuelajs.co/api/v1/products/?title=$title';
+
+var response = await http.get(Uri.parse(url),
+  headers: {'Content-Type': 'application/json'});
+  print(response.statusCode);
+  print(response.body);
+
+if(response.statusCode== 200){
+    List<dynamic> body = jsonDecode(response.body);
+
+    final data = body.map((e) => ProductModel.fromJson(e)).toList();
+
+   _productList = data;
+    notifyListeners();
+
+  } else {
+    print('Something went wrong: ${response.statusCode}');
+    throw Exception(' Failed to load data');
+  }
+  
+  }
+
+  //................GETTING SEACRH FILTER FROM THE TITIE.........................
+
+ void searchByTitle(String query){
+  if (query.isEmpty){
+    _productList;
+  } else {
+    _productList?.where(
+      (product)=>
+      product.title!.toLowerCase().contains(query.toLowerCase()),
+      ).toList();
+  }
+  notifyListeners();
+ }
+//..................................................................................
+
+
+
+
+
+
+
+//..............................GETTING A PRODUCTLIST CATEGORY FROM THE IPA..................
+
 // create a setter for categories
 List<Category>? _categories;
 
@@ -35,10 +86,19 @@ Future<void> getCategories() async{
     throw Exception('failed to load data');
   }
 
-}
+  
 
+}
+//.....................END OF LINE........................................
+
+
+
+
+
+//..........................GETTING THE PRODUCTS FROM THE BACK END API...................
 
 //create setter for products
+
 
 List<ProductModel>? _productList;
 
@@ -98,6 +158,59 @@ void clearCart(ProductModel product){
   _productCartList.remove(product);
   notifyListeners();
 }
+
+
+
+
+
+
+// create a category
+
+List<ProductModel>? _filterbycategory;
+
+// get a setter
+
+List<ProductModel>? get filterbycategory => _filterbycategory;
+
+
+List<ProductModel>? _clearFilter;
+List<ProductModel>? get clearfilter => _clearFilter;
+
+
+
+
+Future<void> getfilterByCategory({required int categoryId}) async{
+  
+  // final url = ApiServices.productsUrl;
+  // define the ur/l
+  final url = 'https://api.escuelajs.co/api/v1/products/?categoryId=$categoryId';
+      
+
+  var response = await http.get(Uri.parse(url),
+  headers: {'Content-Type': 'application/json'});
+  print(response.statusCode);
+  print(response.body);
+
+
+  if(response.statusCode== 200){
+    List<dynamic> body = jsonDecode(response.body);
+
+    final data = body.map((e) => ProductModel.fromJson(e)).toList();
+
+    _filterbycategory = data;
+    notifyListeners();
+
+  } else {
+    print('Something went wrong: ${response.statusCode}');
+    throw Exception(' Failed to load data');
+  }
+}
+void clearFilter() {
+    _filterbycategory = null;
+    notifyListeners();
+  }
+ 
+ 
 
 
 }
