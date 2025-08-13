@@ -6,7 +6,9 @@ class ApiServices {
 
 
   
-  
+  //  register endpoint
+
+  static String registerUrl = '$baseUrl/users/';
   
   
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:online_shop_app/provider/product_provider.dart';
 import 'package:online_shop_app/screens/bottom_container.dart';
+import 'package:online_shop_app/auth/register/createUser.dart';
 
 
 import 'package:provider/provider.dart';
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => ProductProvider(),
       child: MaterialApp(
-        home:BottomContainer()
+        home:UserForm()
       ),
     );
   }

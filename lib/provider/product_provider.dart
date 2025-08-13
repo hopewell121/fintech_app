@@ -9,6 +9,10 @@ import 'package:online_shop_app/services/api_services.dart';
 class ProductProvider extends ChangeNotifier {
 
 
+  //************GETTIG THE END POINT FOR THE USER */
+// creating the user
+  
+
 //...............GETTING THE SEARCH FILTER FROM THE API...............
   // // create a getter
 
@@ -36,7 +40,7 @@ if(response.statusCode== 200){
   
   }
 
-  //................GETTING SEACRH FILTER FROM THE TITIE.........................
+  //................GETTING SEACRH FILTER FROM THE TITIE ( SEARCH BAR ).........................
 
  void searchByTitle(String query){
   if (query.isEmpty){
@@ -57,7 +61,7 @@ if(response.statusCode== 200){
 
 
 
-//..............................GETTING A PRODUCTLIST CATEGORY FROM THE IPA..................
+//..............................GETTING A PRODUCTLIST CATEGORY FROM THE A.P.I..................
 
 // create a setter for categories
 List<Category>? _categories;
@@ -141,8 +145,19 @@ Future<void> getProduct() async{
   
 
 }
+//........END OF LINE.............................
 
-// method to add items to cart
+
+
+
+
+
+
+
+
+
+
+//.................method to add items to cart................................
 
 void addToCart(ProductModel product, context){
   _productCartList.add(product);
@@ -151,8 +166,18 @@ void addToCart(ProductModel product, context){
   actions: [TextButton(onPressed: ()=>Navigator.pop(context), child: Text('Ok'))]
   ));
   notifyListeners();
+
+
+
+
+
+
+
+
+
+
 }
-// method to delete the cart items
+//......................... method to delete the cart items...........................
 
 void clearCart(ProductModel product){
   _productCartList.remove(product);
@@ -164,7 +189,9 @@ void clearCart(ProductModel product){
 
 
 
-// create a category
+// ..................GETTING FILTER BY SELECTING CATEGORY......................
+
+// Create a setter
 
 List<ProductModel>? _filterbycategory;
 
@@ -172,9 +199,6 @@ List<ProductModel>? _filterbycategory;
 
 List<ProductModel>? get filterbycategory => _filterbycategory;
 
-
-List<ProductModel>? _clearFilter;
-List<ProductModel>? get clearfilter => _clearFilter;
 
 
 

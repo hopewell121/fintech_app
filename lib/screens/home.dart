@@ -360,6 +360,9 @@ class _HomePageState extends State<HomePage> {
                                               product.images[0],
                                               fit: BoxFit.fill,
                                               height: 250,
+                                              errorBuilder: (context, error, stackTrace) {
+                                                return Center( child: Text('Error loading image'),);
+                                              },
                                             ),
                                           ),
                                         ),
