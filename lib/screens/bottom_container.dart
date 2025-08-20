@@ -7,7 +7,7 @@ import 'package:online_shop_app/provider/product_provider.dart';
 import 'package:online_shop_app/screens/cart_screen.dart';
 import 'package:online_shop_app/screens/category.dart';
 import 'package:online_shop_app/screens/home.dart';
-import 'package:online_shop_app/screens/profile.dart';
+import 'package:online_shop_app/screens/profile/profile.dart';
 import 'package:provider/provider.dart';
 
 class BottomContainer extends StatefulWidget {
@@ -51,7 +51,7 @@ class _BottomContainerState extends State<BottomContainer> {
             _buildNavItems(Icons.home, 'Home', 0),
             _buildNavItems(Icons.category, 'Categories', 1),
             _buildNavItems(Icons.shopping_cart, 'Cart', 2),
-            _buildNavItems(Icons.person, 'Person', 3),
+            _buildNavItems(Icons.person, 'Profile', 3),
           ],
         ),
       ),

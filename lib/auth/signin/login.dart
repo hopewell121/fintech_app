@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:online_shop_app/auth/register/createUser.dart';
-import 'package:online_shop_app/screens/bottom_container.dart';
+
+import 'package:online_shop_app/auth/signin/login.provider.dart';
+
 
 
 class LoginPage extends StatefulWidget {
@@ -15,6 +17,8 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final LoginProvider loginProvider = LoginProvider();
+  bool isLoading = false;
 
   @override
   void dispose() {
@@ -23,12 +27,20 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-  void _handleLogin() {
-    if (_formKey.currentState!.validate()) {
-      // Handle login logic here
-      Navigator.push(context, MaterialPageRoute(builder: (context)=>BottomContainer()));
-      print('Email: ${_emailController.text}');
-      print('Password: ${_passwordController.text}');
+  Future<void> _handleLogin() async {
+
+    setState(() {
+      isLoading = true;
+    });
+   if (_formKey.currentState!.validate()) {
+      await loginProvider.login(context,
+        _emailController.text.trim(), 
+         _passwordController.text.trim(),
+         
+        );
+         setState(() {
+      isLoading = false;
+    });
     }
   }
 
@@ -111,7 +123,7 @@ class _LoginPageState extends State<LoginPage> {
                 style: ElevatedButton.styleFrom(
                   minimumSize: Size(double.infinity, 50),
                 ),
-                child: Text('Login'),
+                child: isLoading? Center(child: CircularProgressIndicator()): Text('Login'),
               ),
             ],
           ),
