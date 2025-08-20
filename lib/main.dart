@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:online_shop_app/provider/product_provider.dart';
-import 'package:online_shop_app/screens/bottom_container.dart';
+
 import 'package:online_shop_app/auth/register/createUser.dart';
+import 'package:online_shop_app/shared_preference/shared_preferences.dart';
 
 
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Prefs.init();
+  await Prefs.initCheck();
+  
   runApp(const MyApp());
 }
 
