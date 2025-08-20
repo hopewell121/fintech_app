@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:online_shop_app/provider/product_provider.dart';
 
 import 'package:online_shop_app/auth/register/createUser.dart';
-import 'package:online_shop_app/screens/profile/model.dart';
+
 import 'package:online_shop_app/screens/profile/profile_provider.dart';
 import 'package:online_shop_app/shared_preference/shared_preferences.dart';
 

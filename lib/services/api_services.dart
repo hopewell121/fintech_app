@@ -12,7 +12,7 @@ class ApiServices {
 
   static String registerUrl = '$baseUrl/users/';
 
-  static String loginUrl = '$baseUrl/auth/login/';
+  static String loginUrl = '$baseUrl/auth/login';
 
   // profile
 

@@ -6,12 +6,17 @@ import 'package:http/http.dart' as http;
 import 'package:online_shop_app/model/product_model.dart';
 import 'package:online_shop_app/services/api_services.dart';
 
+
 class ProductProvider extends ChangeNotifier {
 
 
   //************GETTIG THE END POINT FOR THE USER */
 // creating the user
   
+
+  //getting the token
+
+
 
 //...............GETTING THE SEARCH FILTER FROM THE API...............
   // // create a getter
@@ -21,6 +26,10 @@ class ProductProvider extends ChangeNotifier {
  final url = 'https://api.escuelajs.co/api/v1/products/?title=$title';
 
 var response = await http.get(Uri.parse(url),
+
+
+
+
   headers: {'Content-Type': 'application/json'});
   print(response.statusCode);
   print(response.body);
